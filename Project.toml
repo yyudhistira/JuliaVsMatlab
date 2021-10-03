@@ -1,0 +1,4 @@
+name = "JuliaForMatlabUsers"
+uuid = "f86e1dd0-7c94-40f8-8432-ef2e3e0e511e"
+authors = ["Yasri Yudhistira <yyudhistira@gmail.com>"]
+version = "0.1.0"
