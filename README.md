@@ -3,16 +3,36 @@ Julia programming cheat sheet if you already know Matlab
 
 # License
 
-This work is licensed under Creative Commons CC-BY-4.0
+This work is licensed under Creative Commons CC-BY-4.0 (c) Yasri Yudhistira and other contributors
 
 Please refer to the following for more information
 https://creativecommons.org/licenses/by/4.0/
 
 # Contents
-1. [Basic programming](#Basic-programming)
+1. [Basic Programming](#Basic-programming)
 2. [Variables](#Variables)
+3. [Number Types](#Number-types)
+    1. [Types](##Types)
+    2. [Literals](##Literals)
+    3. [Type Conversion and Checking](##Type-conversion-and-checking)
+    4. [Numerical operations](##Numerical-operations)
+    5. [Comparison](##Comparison)
+    6. [Logical Operations](##Logical-operations)
+    7. [Complex Number Operations](##Complex-number-operations)
+    8. [Bitwise Operations](##Bitwise-operations)
+    9. [Updating Operations (only available in Julia)](##Updating-operations-only-available-in-Julia)
+4. [Vector and Matrix](#Vector-and-matrix)
+    1. [Creation](##Creation)
+    2. [Combination](##Combination)
+    3. [Removal](##Removal)
+    4. [Indexing](##Indexing)
+    5. [Size and Shape](##Size-and-shape)
+    6. [Resize and Reshape](##Resize-and-reshape)
+    7. [Element Wise Operations](##Element-wise-operations)
+    8. [Comprehension](##Comprehension)
+    9. [Broadcasting](##Broadcasting)
 
-# Basic programming
+# Basic Programming
 | Matlab (2020b) | Julia (1.6) | Notes |
 | -------------- | ----------- | ----- |
 | % Comment      | # Comment   | single line comment
@@ -33,7 +53,7 @@ https://creativecommons.org/licenses/by/4.0/
 | pi = 3         | pi = 3      | Shadowing existing constants is possible in both Matlab and Julia. In Julia it is only possible when it is not yet used
 | clear pi       |             | reset variable to original definition
 
-# Integer, Floating-Point and Boolean Types
+# Number Types
 
 ## Types
 | Matlab (2020b) | Julia (1.6) | Notes |
@@ -41,6 +61,7 @@ https://creativecommons.org/licenses/by/4.0/
 |                | Float16
 | double         | Float32
 | single         | Float64
+|                | BigFloat
 | int8           | Int8
 | int16          | Int16
 | int32          | Int32
@@ -51,6 +72,8 @@ https://creativecommons.org/licenses/by/4.0/
 | uint32         | UInt32
 | uint64         | UInt64
 |                | UInt128
+|                | BigInt
+| double         | Complex{type} | Julia uses different type for complex numbers which may have specialized type, e.g. Complex{Float64}
 | logical        | Bool
 
 ## Literals
@@ -62,18 +85,99 @@ https://creativecommons.org/licenses/by/4.0/
 | 0b11110001u64 | UInt64(0b11110001)
 | 1 or 1. or 1.0           | 1. or 1.0   | float value
 | .5 or 0.5           | .5 or 0.5   | float
+| | 10_000   | use _ to separate thousands
+| | 0.000_000_005   | use _ to separate digits
+| | 0b1011_0010   | use _ to separate digits
+| 1+2i | 1+2im | complex number
 | true          | true        | boolean true literal
 | false         | false        | boolean false literal
 | nan or NaN    | NaN         | Not a number |
 | inf or Inf    | Inf         | Infinity, can be -Inf or +Inf for negative and positive infinity respectively
 
-## Type conversion and checking
+## Type Conversion and Checking
 | Matlab (2020b) | Julia (1.6) | Notes |
 | -------------- | ----------- | ----- |
 | uint8(2.0)    | UInt8(2.0)  | Convert to uint8 from float. Use similar function to convert from one type to another |
 | class(a)      | typeof(a) | Find the type of variable `a` |
 | isnan, isinf, isinteger, isreal, isfinite, isnumeric | isnan, isinf, isinteger, isreal, isfinite, isnumeric | Same functionality
 | isfloat      | isreal
+
+## Numerical Operations
+| Matlab (2020b) | Julia (1.6) | Notes |
+| -------------- | ----------- | ----- |
+| +x | +x | unary plus
+| -x | -x | unary minus
+| x + y | x + y | addition
+| x - y | x - y | subtraction
+| x * y | x * y | multiplication
+| x / y | x / y | division
+| floor(x/y) | x ÷ y | integer divide truncated to an integer
+| x \ y | x \ y | inverse divide equivalent to y / x
+| x ^ y | x ^ y | raises x to the yth power
+| rem(x, y) | x % y or rem(x,y) | reminder equivalent. Note difference between mod and rem in both Matlab and Julia is that mod returns the 0 or same sign as divisor (y) and rem returns same sign as divident (x). So mod(-5, 3) returns 1 and rem(-5, 3) returns -2. While mod(5, -3) returns -1 and rem(5, -3) returns 2.
+| mod(x, y)     | mod(x, y)
+| 1 + 2.2 % result is 3 | 1 + Int(2.2) # result is 3| In case of mixed type, matlab convert all types to common super type. Julia convert to higher precision. |
+| double(1) + 2.2 % result is 3.2 | 1 + 2.2 # result is 3.2 | 
+
+## Comparison
+| Matlab (2020b) | Julia (1.6) | Notes |
+| -------------- | ----------- | ----- |
+| == | == | equality
+| ~= | !=, ≠ | inequality
+| < | < | less than
+| <= | <=, ≤ | less than or equal to
+| > | > | greater than
+| >= | >=, ≥ | greater than or equal to
+
+## Logical Operations
+| Matlab (2020b) | Julia (1.6) | Notes |
+| -------------- | ----------- | ----- |
+| ~x             | !x          | negation
+| x && y         | x && y      | logical shortcut and
+| x \|\| y       | x \|\| y    | logical shortcut or
+
+## Complex Number Operations
+| Matlab (2020b) | Julia (1.6) | Notes |
+| -------------- | ----------- | ----- |
+| 1+2i | 1+2im | complex number
+| complex(1, 2) | complex(1, 2) | complex number
+| real(1 + 2i) | real(1 + 2im)
+| imag(1 + 2i) | imag(1 + 2im)
+| conj(1 + 2i) | conj(1 + 2im)
+| abs(1 + 2i) | abs(1 + 2im) | absolute
+| abs(1 + 2i)^2 | abs2(1 + 2im) | absolute squared
+| angle(1 + 2i) | angle(1 + 2im)
+| sqrt(i) | sqrt(1im)
+| sqrt(-1) | sqrt(-1 + 0im) or sqrt(Complex(-1))| Julia will generate error for sqrt(-1)
+
+## Bitwise Operations
+| Matlab (2020b) | Julia (1.6) | Notes |
+| -------------- | ----------- | ----- |
+| bitcmp(x)     |  ~x | bitwise not
+| bitand(x, y)  | x & y | bitwise and
+| bitor(x, y)   | x | y | bitwise or
+| bitxor(x, y)  | x ⊻ y | bitwise xor (exclusive or)
+| bitshift(x, -y) | x >>> y | logical shift right. In matlab if x is negative it turns into arightmatic shift right.
+|               | x >> y | arithmetic shift right
+| bitshift(x, y) | x << y | logical/arithmetic shift left
+
+## Updating Operations (only available in Julia)
+| Matlab (2020b) | Julia (1.6) | Notes |
+| -------------- | ----------- | ----- |
+|  | +=
+|  | -=
+|  | *=
+|  | /=
+|  | \=
+|  | ÷=
+|  | %=
+|  | ^=
+|  | &=
+|  | |=
+|  | ⊻=
+|  | >>>=
+|  | >>=
+|  | <<=
 
 # Vector and Matrix
 
@@ -94,17 +198,17 @@ https://creativecommons.org/licenses/by/4.0/
 | ones(m, n)       | ones(m, n) | Types can also be specified, see zeros
 | a = eye(m)       | a = I | Identity matrix, needs `using LinearAlgebra` in Julia
 | diag(x)          | Diagonal(x) | create diagonal matrix
-| rand(m)          | rand(m, m)
+| rand(m)          | rand(m, m) | Julia needs explicit dimension
 | rand(m, n)       | rand(m, n)
-| randn(m)         | randn(m, m)
+| randn(m)         | randn(m, m) | Julia needs explicit dimension
 | randn(m, n)      | randn(m, n)
-| true(m)          | trues(m, m)
+| true(m)          | trues(m, m) | Julia needs explicit dimension
 | true(m, n)       | trues(m, n)
-| false(m)         | falses(m, m)
+| false(m)         | falses(m, m) | Julia needs explicit dimension
 | false(m, n)      | falses(m, n)
-| nan(m) or NaN(m) | repeat([NaN], m, m)
+| nan(m) or NaN(m) | repeat([NaN], m, m) | Julia needs explicit dimension
 | nan(m, n) or NaN(m, n) | repeat([NaN], m, n)
-| inf(m) or Inf(m) | repeat([Inf], m, m)
+| inf(m) or Inf(m) | repeat([Inf], m, m) | Julia needs explicit dimension
 | inf(m, n) or Inf(m, n) | repeat([Inf], m, n)
 | a = b            | a = copy(b) | copy values. In matlab copy by value is the only assignment possible, although it is technically assigned by reference until change on `b` is requested.
 |                  | a = b | assign by reference
@@ -121,6 +225,31 @@ https://creativecommons.org/licenses/by/4.0/
 |                  | [[1, 2], [3, 4]] | Combination with `','` gives unexpected result from matlab point of view, resulting in arrays of two vectors, namely [1, 2] and [3, 4]
 | [[1; 2; 3] [4; 5; 6]] | [1:3 4:6]
 | A = [10  20  30; 60  70  80];<br>A(3, 4) = 1; | B = zeros(eltype(A), 3, 4);<br>B[1:2, 1:3] = A;<br>A = B;<br>A[3,4] = 1; | expanding matrix in Julia is done by initializing matrix with larger size, and copy the first few elements into it
+
+## Removal
+| Matlab (2020b) | Julia (1.6) | Notes |
+| -------------- | ----------- | ----- |
+| A(2, :) = [] | A = A[1:end .!= 2, :] | remove row 2
+| A(:, 2) = [] | A = A[:, 1:end .!= 2] | remove column 2
+| A([2, 3], :) = [] | A = A[setdiff(1:end, [2, 3]), :] | remove row 2 and 3
+| A([2, 3], :) = []; <br>A(:, 1) = []; | A = A[setdiff(1:end, [2, 3]), 1:end .!= 1] | remove row 2 and 3 and column 1. Julia can do rows and columns removal simulataneously
+| squeeze(A) | dropdims(A, dims=tuple(findall(size(A) .== 1)...)) | Remove all dimensions of length 1
+|  | dropdims(A, dims=2) | Remove 2nd dimension of A if 2nd dimension has length of 1. If length is not 1, error is thrown
+
+## Indexing
+| Matlab (2020b) | Julia (1.6) | Notes |
+| -------------- | ----------- | ----- |
+| X = A(I_1, I_2, ..., I_n) | X = A[I_1, I_2, ..., I_n] | A is n-dimensional array. Note Julia uses [] and Matlab ()
+| X = A(1:2:10, 2:2:10) | X = A[1:2:10, 2:2:10] | Multi dimensional indexing using range
+| A([1, 3], [4, 5]) | A[[1, 3], [4, 5]] | Select a few rows (1 & 3) and columns (4 & 5). Note difference in bracket between Julia [] and Matlab ()
+| A(2:3, 2:end-1) | A[2:3, 2:end-1] | use special keyword `end` to refer to last index
+| A([]) | A[[]] | Select no element from A
+| A(2, :) | transpose(A[2, :]) | Select 2nd row of the 2D matrix. In Julia it will be gathered as Vector (column matrix). To have the same dimension, transpose is needed.
+| A(:, 2) | A[:, 2] | Select 2nd column of the 2D matrix.
+| A(:) | A[:] | vectorizing matrix
+| A([true; true; false; false]) | A[[true, true, false, false]] | select by boolean. Note that Julia will produce column vector. In Matlab use semicolon (;)
+| A([true, true, false, false]) | transpose(A[[true, true, false, false]]) | select by boolean. Note that Julia will produce column vector, hence transpose is needed if Matlab uses comma (,) in boolean list
+| A(I_1, I_2, ..., I_n) = X | A[I_1, I_2, ..., I_n] = X<br>A[I_1, I_2, ..., I_n] .= X | Number of element in X must be the same as the place in A to fill in. Note sign difference in Julia [] and Matlab ()
 
 ## Size and Shape
 | Matlab (2020b) | Julia (1.6) | Notes |
@@ -145,44 +274,35 @@ https://creativecommons.org/licenses/by/4.0/
 | iscolumn(A) | isa(A, Union{Array, Matrix}) && (ndims(A) == 1 \|\| sum(size(A)[2:end] .!= 1) == 0) | Determine whether array is column vector
 | isempty(A) | isempty(A) | Determine whether array is empty
 
-## Resize and reshape
+## Resize and Reshape
 | Matlab (2020b) | Julia (1.6) | Notes |
 | -------------- | ----------- | ----- |
 | reshape(A, 3, 2) | reshape(A, 3, 2) | an array containing the same data as A, but with different dimensions
 | reshape(A, [], 1) | reshape(A, :, 1) | reshape into column vector
 | reshape(A, 1, []) | reshape(A, 1, :) | reshape into row vector
-| sort(A, 2) | sort(A, dims=2) | Sort array elements on 2nd dimension
-| sort(A, 'descend') | sort(A, rev=true) | Sort array elements from high to low
-| sortrows | | Sort rows of matrix or table
-| flip | | Flip order of elements
-| fliplr | | Flip array left to right
-| flipud | | Flip array up to down
-| rot90 | | Rotate array 90 degrees
-| transpose | | Transpose vector or matrix
-| ctranspose | | Complex conjugate transpose
-| permute | | Permute array dimensions
-| ipermute | | Inverse permute array dimensions
-| circshift | | Shift array circularly
-| shiftdim | | Shift array dimensions
-| squeeze | | Remove dimensions of length 1
+| sort(A) | sort(A) | Sort vector A
+| sort(A) | sort(A, dims=1) | Sort matrix by first dimension. Note in Julia dimension explicit defition is required
+| sort(A, 2) | sort(A, dims=2) | Sort matrix by 2nd dimension
+| sort(A) | sort(A, rev=true) | Sort vector A
+| sort(A, 'descend') | sort(A, dims=1, rev=true) | Sort matrix by first dimension from high to low. For matrix, dimension is required
+| [B, idx] = sort(A) | idx = sortperm(A); B = A(idx) | sort vector A and return it's index. Note that in Julia it only works for vector, not matrix
+| [B, idx] = sort(A) |  | no equivalent function in Julia when A is matrix
+| sortrows(A, 1) | sortslices(A, dims=1, lt=(x, y)->isless(x[1], y[1])) | Sort rows of matrix based on column 1
+| sortrows(A, 2) | sortslices(A, dims=1, lt=(x, y)->isless(x[2], y[2])) | Sort rows of matrix based on column 1
+| sortrows(A, [1, 7]) | sortslices(A, dims=1, lt=(x, y)->(isless(x[1], y[1]) \|\| (isequal(x[1], y[1]) && isless(x[7], y[7])))) | Sort rows of matrix based on column 1 then column 7
+| transpose(A) | transpose(A) | Transpose vector or matrix
+| A' or ctranspose(A) | A' or adjoint(A) | Complex conjugate transpose
+| flip(A) | reverse(A, dims=1) | Flip order of elements
+| flip(A, 2) | reverse(A, dims=2) | Flip order of elements in 2nd dimension
+| rot90(A) | rotl90(A) | Rotate array 90 degrees counterclockwise (left)
+| rot90(A, 3) | rotl90(A, 3) or rotr90(A) | Rotate array 270 degrees counterclockwise (left) or 90 degree clockwise (right)
+| rot90(A, 2) | rotl90(A, 2) or rotr90(A, 2) or rot180(A) | Rotate array 180 degrees
+| permute(A, [m, n, p]) | permutedims(A, (m, n, p)) | Permute array dimensions
+| circshift(A, n) | circshift(A, n) | Shift array circularly
+| circshift(A, n, m) | circshift(A, (n, m)) | Shift matrix circularly. Julia uses tuple
+| shiftdim(A) | | Shift array dimensions
 
-
-## Indexing
-| Matlab (2020b) | Julia (1.6) | Notes |
-| -------------- | ----------- | ----- |
-| X = A(I_1, I_2, ..., I_n) | X = A[I_1, I_2, ..., I_n] | A is n-dimensional array. Note Julia uses [] and Matlab ()
-| X = A(1:2:10, 2:2:10) | X = A[1:2:10, 2:2:10] | Multi dimensional indexing using range
-| A([1, 3], [4, 5]) | A[[1, 3], [4, 5]] | Select a few rows (1 & 3) and columns (4 & 5). Note difference in bracket between Julia [] and Matlab ()
-| A(2:3, 2:end-1) | A[2:3, 2:end-1] | use special keyword `end` to refer to last index
-| A([]) | A[[]] | Select no element from A
-| A(2, :) | transpose(A[2, :]) | Select 2nd row of the 2D matrix. In Julia it will be gathered as Vector (column matrix). To have the same dimension, transpose is needed.
-| A(:, 2) | A[:, 2] | Select 2nd column of the 2D matrix.
-| A(:) | A[:] | vectorizing matrix
-| A([true; true; false; false]) | A[[true, true, false, false]] | select by boolean. Note that Julia will produce column vector. In Matlab use semicolon (;)
-| A([true, true, false, false]) | transpose(A[[true, true, false, false]]) | select by boolean. Note that Julia will produce column vector, hence transpose is needed if Matlab uses comma (,) in boolean list
-| A(I_1, I_2, ..., I_n) = X | A[I_1, I_2, ..., I_n] = X<br>A[I_1, I_2, ..., I_n] .= X | Number of element in X must be the same as the place in A to fill in. Note sign difference in Julia [] and Matlab ()
-
-## Element wise operation
+## Element Wise Operations
 | Matlab (2020b) | Julia (1.6) | Notes |
 | -------------- | ----------- | ----- |
 | +x | +x | unary plus
@@ -196,87 +316,55 @@ https://creativecommons.org/licenses/by/4.0/
 | x .^ y | x .^ y | element wise raises x to the yth power
 | arrayfun(f, x) | f.(x) | element wise f. Sometimes f(x) in matlab gives the same result when x is array
 | sin(x) or arrayfun(sin, x)| sin.(x) | element wise sin, return same dimension as x. Julia will throw error on sin(x) when x is array
-| max(a, b) or arrayfun(@(x, y) max(x,y), a, b) | element wise max, return same dimension as a and b. Julia max(a, b) will throw error when a and b are arrays
+| max(a, b) or arrayfun(@(x, y) max(x,y), a, b) | max.(a,b) | element wise max, return same dimension as a and b. Julia max(a, b) will throw error when a and b are arrays
 | a == b or arrayfun(@(x, y) x == y, a, b)| a .== b | element wise equality comparison, return same dimension as a and b. Julia a == b will do all(a .== b) when a and b are arrays
 | a > b or arrayfun(@(x, y) x > y, a, b)| a .> b | element wise greater than comparison. Same rule as above. Same as other operators as .< .!= .≈ (isapprox), .≉
 
 ## Comprehension
 | Matlab (2020b) | Julia (1.6) | Notes |
 | -------------- | ----------- | ----- |
+| sum(1 ./ ((1:1000) .^ 2)) | sum(1/n^2 for n=1:1000) | sums a series
+| arrayfun(@(x, y, z) 0.25\*x + 0.5\*y + 0.25\*z, x(1:end-2), x(2:end-1), x(3:end)) | [ 0.25\*x[i-1] + 0.5\*x[i] + 0.25\*x[i+1] for i=2:length(x)-1 ] | weighted average of the current element and its left and right neighbor along a 1-d grid
+| | [(i,j) for i=1:3 for j=1:i if i+j == 4] | result:<br>2-element Vector{Tuple{Int64, Int64}}:<br>(2, 2)<br>(3, 1)
+| | map(tuple, (1/(i+j) for i=1:2, j=1:2), [1 3; 2 4]) | result: <br>2×2 Matrix{Tuple{Float64, Int64}}:<br>(0.5, 1)       (0.333333, 3)<br>(0.333333, 2)  (0.25, 4)
 
 ## Broadcasting
-
-## Creating grid
-
-# Operations
-
-## Number Operations
 | Matlab (2020b) | Julia (1.6) | Notes |
 | -------------- | ----------- | ----- |
-| +x | +x | unary plus
-| -x | -x | unary minus
-| x + y | x + y | addition
-| x - y | x - y | subtraction
-| x * y | x * y | multiplication
-| x / y | x / y | division
-| floor(x/y) | x ÷ y | integer divide truncated to an integer
-| x \ y | x \ y | inverse divide equivalent to y / x
-| x ^ y | x ^ y | raises x to the yth power
-| rem(x, y) | x % y or rem(x,y) | reminder equivalent. Note difference between mod and rem in both Matlab and Julia is that mod returns the 0 or same sign as divisor (y) and rem returns same sign as divident (x). So mod(-5, 3) returns 1 and rem(-5, 3) returns -2. While mod(5, -3) returns -1 and rem(5, -3) returns 2.
-| mod(x, y)     | mod(x, y)
-| 1 + 2.2 % result is 3 | 1 + Int(2.2) # result is 3| In case of mixed type, matlab convert all types to common super type. Julia convert to higher precision. |
-| double(1) + 2.2 % result is 3.2 | 1 + 2.2 # result is 3.2 | 
+| a = rand(2,1); A = rand(2,3);<br>a + A | a = rand(2,1); A = rand(2,3);<br>broadcast(+, a, A) | Result 2x3 matrix. Matlab will perform auto expansion, Julia needs explicit broadcast
+| a = rand(2,1); b = rand(1,2);<br>a + b | a = rand(2,1); b = rand(1,2);<br>broadcast(+, a, b) | Result: 2x2 matrix. Matlab will perform auto expansion, Julia needs explicit broadcast
 
-## Bitwise operation
-| Matlab (2020b) | Julia (1.6) | Notes |
-| -------------- | ----------- | ----- |
-| bitcmp(x)     |  ~x | bitwise not
-| bitand(x, y)  | x & y | bitwise and
-| bitor(x, y)   | x | y | bitwise or
-| bitxor(x, y)  | x ⊻ y | bitwise xor (exclusive or)
-| bitshift(x, -y) | x >>> y | logical shift right. In matlab if x is negative it turns into arightmatic shift right.
-|               | x >> y | arithmetic shift right
-| bitshift(x, y) | x << y | logical/arithmetic shift left
+# String
 
-## Updating operations (only available in Julia)
-| Matlab (2020b) | Julia (1.6) | Notes |
-| -------------- | ----------- | ----- |
-|  | +=
-|  | -=
-|  | *=
-|  | /=
-|  | \=
-|  | ÷=
-|  | %=
-|  | ^=
-|  | &=
-|  | |=
-|  | ⊻=
-|  | >>>=
-|  | >>=
-|  | <<=
-
-### Logical Operations
-| Matlab (2020b) | Julia (1.6) | Notes |
-| -------------- | ----------- | ----- |
-| ~x            | !x          | negation
-| x && y        | x && y      | logical shortcut and
-| x || y        | x || y      | logical shortcut or
-
-### String Types
+## String Types
 | Matlab (2020b) | Julia (1.6) | Notes |
 | -------------- | ----------- | ----- |
 | char           | Char
 | string         | String
 
-### String Operations
+## Char Operations
+| Matlab (2020b) | Julia (1.6) | Notes |
+| -------------- | ----------- | ----- |
+| c = 'hello'    | c = ['h', 'e', 'l', 'l', 'o']
+| d = double(c)  | d = Float32.(c)
+| a = char(d)    | a = Char.(d)
+| 'x' - 'a'      | 'x' - 'a'   | Result: 23
+| 'A' + 1        | Int('A' + 1) | Matlab result 66
+| char('A' + 1)  | 'A' + 1     | Julia result 'B'
+
+## String Operations (with Matlab Char Array)
 | Matlab (2020b) | Julia (1.6) | Notes |
 | -------------- | ----------- | ----- |
 | s = 'hello world'; | s = "hello world"; | With matlab char array
-| s = 'hello "alien" world'; | s = "hello world"; | With matlab char array
+| s = 'hello "alien" world'; | s = "hello \"alien\" world"; | With matlab char array
+
+## String Operations (with Matlab String)
+| Matlab (2020b) | Julia (1.6) | Notes |
+| -------------- | ----------- | ----- |
 | s = "hello world"; | s = "hello world"; | With matlab string
 
-## Function
+
+# Function
 <table>
   <tr>
     <th>Matlab (2020b)</th>
@@ -298,4 +386,12 @@ end
   </tr>
 
 </table>
+
+# Operations
+
+## Creating grid
+
+## Linear Algebra
+
+## Image Operation
 
