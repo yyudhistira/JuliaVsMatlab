@@ -1,4 +1,5 @@
-<style>
+<style
+  type="text/css">
 .matlab {
   background-color: #DDCC77;
   color: black;
