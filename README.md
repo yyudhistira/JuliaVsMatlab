@@ -1,7 +1,3 @@
-<div>
-  <img src="style.svg" width="1" height="1">
-</div>
-
 # JuliaForMatlabUsers
 Julia programming cheat sheet if you already know Matlab
 
@@ -358,33 +354,121 @@ https://creativecommons.org/licenses/by/4.0/
 | 'A' <= 'X' <= 'Z' | 'A' <= 'X' <= 'Z' | Result: true
 | "A" <= "X" <= "Z" | 'A' <= 'X' <= 'Z' | Result: true
 
-## String Creation & Concatenation
+## String Creation and Concatenation
+### Creation
 ```matlab
+% Matlab with char array
 s = 'hello world';
+w = sprintf('hello "alien" world\n');
+```
+```matlab
+% Matlab with string
+s = "hello world";
+w = "hello ""alien"" world" + sprintf('\n');
+```
+```julia
+# Julia
+s = "hello world";
+w = "hello \"alien\" world\n";
+w = """hello "alien" world\n"""; # Julia can use triple quote
+ll = """This is multiline
+string"""; # Long multiline string with triple quote
 ```
 
-| Matlab (2020b) char array | Matlab (2020b) string | Julia (1.6) | Notes |
-| ------------------------- | --------------------- | ----------- | ----- |
-| s = 'hello world'; | s = "hello world"; | s = "hello world";
-| w = sprintf('hello "alien" world\\n'); | w = "hello ""alien"" world" + sprintf('\\n'); | w = "hello \\"alien\\" world\\n";
-| w = sprintf('hello "alien" world\\n'); | w = "hello ""alien"" world" + sprintf('\\n'); | w = """hello "alien" world\\n"""; | Julia can use triple quote
-| | | w = "This is long \ <br>line"; | Long line can be broken by \
-| ss = ['hello', 'world']; | ss = "hello" + "world"; | ss = "hello" * "world; | Julia uses * for string concatenation
-| | ["Red" "Blue" "Green"] + ["Truck" "Sky" "Tree"] | ["Red" "Blue" "Green"] .* ["Truck" "Sky" "Tree"] | Result: "RedTruck" "BlueSky" "GreenTree" | Julia uses element wise concatenation (.*)
-| strcat('  a  ', '  b  ') | | rstrip("  a  ") * rstrip("  b  ") | Result: '  ab  '<br>Matlab strcat with char removes right spaces
-| | strcat("  a  ", "  b  ") | "  a  " * "  b  " | Result: "  a    b  "<br>Matlab strcat with spring does not remove right spaces
-| | append("  a  ", "  b  ") | "  a  " * "  b  " | Result: "  a    b  "<br>append behaves the same as +
-| | join(["apples", "bananas", "pineapples"], "") | join(["apples", "bananas", "pineapples"]) | Result: "applesbananaspineapples"<br>Matlab delimiter default is single space, Julia default is empty string
-| | join(["apples", "bananas", "pineapples"]) | join(["apples", "bananas", "pineapples"], " ") | Result: "apples bananas pineapples"<br>Matlab delimiter default is single space, Julia default is empty string
-| | join(["apples", "bananas", "pineapples"], ", ") | join(["apples", "bananas", "pineapples"], ", ") | Result: "apples, bananas, pineapples"
-| | join(["apples", "bananas", "pineapples"; "aa", "bb", "cc"], ", ") | join.([["apples", "bananas", "pineapples"], ["aa", "bb", "cc"]], ", ") | Result: ["apples, bananas, pineapples"; "aa, bb, cc"]<br>Julia use element wise operation (.) on join function
-| | join(["Carlos","Sada"; "Ella","Olsen"; "Diana","Lee"], 1) | | Result: "Carlos Ella Diana" "Sada Olsen Lee"<br>Use for loop in Julia
-| | join(["x","y","z"; "a","b","c"], [" + "," = "; " - "," = "]) | | Result: "x + y = z" "a - b = c"<br>Use for loop in Julia
-| blanks(5) | blanks(5) | " " ^ 5 | Result: "     "
-| repmat('a', 1, 5) | join(repmat("a", 1, 5), "") | "a" ^ 5 | Result: "aaaaa"
-| repmat('hello', 1, 5) | join(repmat("hello", 1, 5), "") | "hello" ^ 5 | Result: "hellohellohellohellohello"
+### Repetition
+```matlab
+% Matlab with char array
+blanks(5) % Returns: '     '. Only generate char array, not string
+repmat('a', 1, 5) % Returns 'aaaaa'
+repmat('hello', 1, 5) % Returns 'hellohellohellohellohello'
+```
+```matlab
+% Matlab with string
+repmat("a", 1, 5) % Returns "aaaaa"
+repmat('hello', 1, 5) % Returns "hellohellohellohellohello"
+```
+```julia
+# Julia
+blanks(5) # Returns: "     "
+"a" ^ 5 # Returns "aaaaa"
+"hello" ^ 5 # Returns "hellohellohellohellohello"
+```
+
+### String Concatenation
+```matlab
+% Matlab with char array
+ss = ['hello', 'world'];
+
+strcat(' a ', ' b ') % Result: Result: ' a b'. Matlab strcat with char removes right spaces
+```
+```matlab
+% Matlab with string
+ss = "hello" + "world";
+
+["Red" "Blue" "Green"] + ["Truck" "Sky" "Tree"] % Result: "RedTruck" "BlueSky" "GreenTree"
+
+strcat(" a ", " b ") % Result: " a b " Matlab strcat with string concatenates all characters
+
+append(" a ", " b ") % Result: " a b " Same behavior as +
+```
+```julia
+# Julia
+ss = "hello" * "world"; # Julia uses * for string concatenation
+
+["Red" "Blue" "Green"] .* ["Truck" "Sky" "Tree"] # Result: "RedTruck" "BlueSky" "GreenTree"
+
+rstrip(" a ") * rstrip(" b ") # Same output as strcat(' a ', ' b ') on Matlab
+
+" a " * " b " # Same output as strcat(" a ", " b ") on Matlab
+```
+
+### Join
+```matlab
+% Matlab with string
+join(["apples", "bananas", "pineapples"], "") % Result "applesbananaspineapples" Matlab default delimiter is " "
+
+join(["apples", "bananas", "pineapples"]) % Result "apples bananas pineapples"
+
+join(["apples", "bananas", "pineapples"], ", ") % Result: "apples, bananas, pineapples"
+
+join(["apples", "bananas", "pineapples"; "aa", "bb", "cc"], ", ") % Result: ["apples, bananas, pineapples"; "aa, bb, cc"]
+
+join(["Carlos","Sada"; "Ella","Olsen"; "Diana","Lee"], 1) % Result: "Carlos Ella Diana" "Sada Olsen Lee". Use loop in Julia
+
+join(["x","y","z"; "a","b","c"], [" + "," = "; " - "," = "]) % Result: "x + y = z" "a - b = c". Use loop in Julia
+```
+```julia
+# Julia
+join(["apples", "bananas", "pineapples"]) # Result "applesbananaspineapples" Julia default delimiter is ""
+
+join(["apples", "bananas", "pineapples"], " ") # Result "apples bananas pineapples"
+
+join(["apples", "bananas", "pineapples"], ", ") # Result: "apples, bananas, pineapples"
+
+join.([["apples", "bananas", "pineapples"], ["aa", "bb", "cc"]], ", ")	# Result: ["apples, bananas, pineapples"; "aa, bb, cc"]
+```
 
 ## String Conversion
+```matlab
+% Matlab with char array
+```
+```matlab
+% Matlab with string
+```
+```julia
+# Julia
+```
+
+```matlab
+% Matlab with char array
+```
+```matlab
+% Matlab with string
+```
+```julia
+# Julia
+```
+
 | Matlab (2020b) char array | Matlab (2020b) string | Julia (1.6) | Notes |
 | ------------------------- | --------------------- | ----------- | ----- |
 | char("hello") | | collect("hello") | Returns : ['h', 'e', 'l', 'l', 'o']
@@ -395,17 +479,62 @@ s = 'hello world';
 | double('∀ x ∃ y') | | Int.(collect("∀ x ∃ y")) | Returns: 8704 32 120 32 8707 32 121<br>For Unicode, use element wise operation to convert char to Int
 | num2str(123) | string(123) | string(123) | Returns: "123"
 
+```matlab
+% Matlab with char array
+```
+```matlab
+% Matlab with string
+```
+```julia
+# Julia
+```
+
+
 ## String Testing
-| Matlab (2020b) char array | Matlab (2020b) string | Julia (1.6) | Notes |
-| ------------------------- | --------------------- | ----------- | ----- |
-| length('∀ x ∃ y') | | length("∀ x ∃ y") | Returns : 7<br>length with string in matlab returns 1 (number of string, not length of the string)
-| strlength('∀ x ∃ y') | strlength("∀ x ∃ y") | length("∀ x ∃ y") | Returns : 7<br>strlength can be used in both char array and string
-| str = {'Mary Ann Jones', 'Paul Jay Burns', 'John Paul Smith'};<br>contains(str, 'Paul') | str = ["Mary Ann Jones", "Paul Jay Burns", "John Paul Smith"];<br>contains(str, "Paul") | str = ["Mary Ann Jones", "Paul Jay Burns", "John Paul Smith"];<br>contains.(str, "Paul) | Result: 0 1 1<br>Julia uses element wise operation
-| contains(str, {'Paul', 'Ann'}) | contains(str, ["Paul", "Ann"]) | contains.(str, r"Paul\|Ann") | Result: 1 1 1<br>Julia uses regex
-| contains(str, 'jones', 'IgnoreCase', true) | contains(str, "jones", 'IgnoreCase', true) | contains.(str, r"jones"i) | Result: 1 0 0<br>Julia uses regex
-| count(str, 'n') | count(str, "n") | | Result: 3 1 1<br>Julia needs loop
+### String length
+```matlab
+% Matlab with char array
+length('∀ x ∃ y') % Returns: 7
+strlength('∀ x ∃ y') % Returns: 7
+```
+```matlab
+% Matlab with string
+length("∀ x ∃ y") % Returns: 1. (number of string, not length of the string)
+strlength("∀ x ∃ y") % Returns: 7
+```
+```julia
+# Julia
+length("∀ x ∃ y") # Returns: 7
+strlength("∀ x ∃ y") # Returns: 7
+```
 
+### Contains
+```matlab
+% Matlab with char array
+str = {'Mary Ann Jones', 'Paul Jay Burns', 'John Paul Smith'};
 
+contains(str, 'Paul') % Returns: 0 1 1
+contains(str, {'Paul', 'Ann'}) % Returns: 1 1 1
+contains(str, 'jones', 'IgnoreCase', true) % Returns 1 0 0
+count(str, 'n') % Counts number of n in each string. Returns: 3 1 1. Not available in Julia
+```
+```matlab
+% Matlab with string
+str = ["Mary Ann Jones", "Paul Jay Burns", "John Paul Smith"];
+
+contains(str, "Paul") % Returns: 0 1 1
+contains(str, ["Paul", "Ann"]) % Returns: 1 1 1
+contains(str, "jones", 'IgnoreCase', true) % Returns 1 0 0
+count(str, "n") % Counts number of n in each string. Returns: 3 1 1. Not available in Julia
+```
+```julia
+# Julia
+str = ["Mary Ann Jones", "Paul Jay Burns", "John Paul Smith"];
+
+contains.(str, "Paul") # Returns: 0 1 1
+contains.(str, r"Paul|Ann") # Returns: 1 1 1
+contains.(str, r"jones"i) # Case insensitive. Returns: 1 0 0
+```
 
 ## String Indexing
 | Matlab (2020b) char array | Matlab (2020b) string | Julia (1.6) | Notes |
