@@ -1,4 +1,4 @@
-<style
+<!--<style
   type="text/css">
 .matlab {
   background-color: #DDCC77;
@@ -13,6 +13,7 @@
   color: black;
 } 
 </style>
+-->
 
 # JuliaForMatlabUsers
 Julia programming cheat sheet if you already know Matlab
