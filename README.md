@@ -1,3 +1,17 @@
+<style>
+.matlab {
+  background-color: #DDCC77;
+  color: black;
+} 
+.matlab-other {
+  background-color: #B5A8F7;
+  color: black;
+} 
+.julia {
+  background-color: #7ECEC0;
+  color: black;
+} 
+</style>
 # JuliaForMatlabUsers
 Julia programming cheat sheet if you already know Matlab
 
@@ -349,19 +363,95 @@ https://creativecommons.org/licenses/by/4.0/
 | d = double(c)  | d = Float32.(c)
 | a = char(d)    | a = Char.(d)
 | 'x' - 'a'      | 'x' - 'a'   | Result: 23
-| 'A' + 1        | Int('A' + 1) | Matlab result 66
-| char('A' + 1)  | 'A' + 1     | Julia result 'B'
+| 'A' + 1        | Int('A' + 1) | Result: 66
+| char('A' + 1)  | 'A' + 1     | Result: 'B'
+| 'A' <= 'X' <= 'Z' | 'A' <= 'X' <= 'Z' | Result: true
+| "A" <= "X" <= "Z" | 'A' <= 'X' <= 'Z' | Result: true
 
-## String Operations (with Matlab Char Array)
-| Matlab (2020b) | Julia (1.6) | Notes |
-| -------------- | ----------- | ----- |
-| s = 'hello world'; | s = "hello world"; | With matlab char array
-| s = 'hello "alien" world'; | s = "hello \"alien\" world"; | With matlab char array
+## String Creation & Concatenation
+```matlab
+s = 'hello world';
+```
 
-## String Operations (with Matlab String)
-| Matlab (2020b) | Julia (1.6) | Notes |
-| -------------- | ----------- | ----- |
-| s = "hello world"; | s = "hello world"; | With matlab string
+| Matlab (2020b) char array | Matlab (2020b) string | Julia (1.6) | Notes |
+| ------------------------- | --------------------- | ----------- | ----- |
+| s = 'hello world'; | s = "hello world"; | s = "hello world";
+| w = sprintf('hello "alien" world\\n'); | w = "hello ""alien"" world" + sprintf('\\n'); | w = "hello \\"alien\\" world\\n";
+| w = sprintf('hello "alien" world\\n'); | w = "hello ""alien"" world" + sprintf('\\n'); | w = """hello "alien" world\\n"""; | Julia can use triple quote
+| | | w = "This is long \ <br>line"; | Long line can be broken by \
+| ss = ['hello', 'world']; | ss = "hello" + "world"; | ss = "hello" * "world; | Julia uses * for string concatenation
+| | ["Red" "Blue" "Green"] + ["Truck" "Sky" "Tree"] | ["Red" "Blue" "Green"] .* ["Truck" "Sky" "Tree"] | Result: "RedTruck" "BlueSky" "GreenTree" | Julia uses element wise concatenation (.*)
+| strcat('  a  ', '  b  ') | | rstrip("  a  ") * rstrip("  b  ") | Result: '  ab  '<br>Matlab strcat with char removes right spaces
+| | strcat("  a  ", "  b  ") | "  a  " * "  b  " | Result: "  a    b  "<br>Matlab strcat with spring does not remove right spaces
+| | append("  a  ", "  b  ") | "  a  " * "  b  " | Result: "  a    b  "<br>append behaves the same as +
+| | join(["apples", "bananas", "pineapples"], "") | join(["apples", "bananas", "pineapples"]) | Result: "applesbananaspineapples"<br>Matlab delimiter default is single space, Julia default is empty string
+| | join(["apples", "bananas", "pineapples"]) | join(["apples", "bananas", "pineapples"], " ") | Result: "apples bananas pineapples"<br>Matlab delimiter default is single space, Julia default is empty string
+| | join(["apples", "bananas", "pineapples"], ", ") | join(["apples", "bananas", "pineapples"], ", ") | Result: "apples, bananas, pineapples"
+| | join(["apples", "bananas", "pineapples"; "aa", "bb", "cc"], ", ") | join.([["apples", "bananas", "pineapples"], ["aa", "bb", "cc"]], ", ") | Result: ["apples, bananas, pineapples"; "aa, bb, cc"]<br>Julia use element wise operation (.) on join function
+| | join(["Carlos","Sada"; "Ella","Olsen"; "Diana","Lee"], 1) | | Result: "Carlos Ella Diana" "Sada Olsen Lee"<br>Use for loop in Julia
+| | join(["x","y","z"; "a","b","c"], [" + "," = "; " - "," = "]) | | Result: "x + y = z" "a - b = c"<br>Use for loop in Julia
+| blanks(5) | blanks(5) | " " ^ 5 | Result: "     "
+| repmat('a', 1, 5) | join(repmat("a", 1, 5), "") | "a" ^ 5 | Result: "aaaaa"
+| repmat('hello', 1, 5) | join(repmat("hello", 1, 5), "") | "hello" ^ 5 | Result: "hellohellohellohellohello"
+
+## String Conversion
+| Matlab (2020b) char array | Matlab (2020b) string | Julia (1.6) | Notes |
+| ------------------------- | --------------------- | ----------- | ----- |
+| char("hello") | | collect("hello") | Returns : ['h', 'e', 'l', 'l', 'o']
+| | string('hello') | join(['h', 'e', 'l', 'l', 'o']) | Returns: "hello"
+| str2double('123') | str2double("123") | parse(Float32, "123")
+| | double("123") | parse(Float32, "123")
+| double('123') | | codeunits("123") | Returns: 49 50 51. In Julia codeunits only works with ASCII characters
+| double('∀ x ∃ y') | | Int.(collect("∀ x ∃ y")) | Returns: 8704 32 120 32 8707 32 121<br>For Unicode, use element wise operation to convert char to Int
+| num2str(123) | string(123) | string(123) | Returns: "123"
+
+## String Testing
+| Matlab (2020b) char array | Matlab (2020b) string | Julia (1.6) | Notes |
+| ------------------------- | --------------------- | ----------- | ----- |
+| length('∀ x ∃ y') | | length("∀ x ∃ y") | Returns : 7<br>length with string in matlab returns 1 (number of string, not length of the string)
+| strlength('∀ x ∃ y') | strlength("∀ x ∃ y") | length("∀ x ∃ y") | Returns : 7<br>strlength can be used in both char array and string
+| str = {'Mary Ann Jones', 'Paul Jay Burns', 'John Paul Smith'};<br>contains(str, 'Paul') | str = ["Mary Ann Jones", "Paul Jay Burns", "John Paul Smith"];<br>contains(str, "Paul") | str = ["Mary Ann Jones", "Paul Jay Burns", "John Paul Smith"];<br>contains.(str, "Paul) | Result: 0 1 1<br>Julia uses element wise operation
+| contains(str, {'Paul', 'Ann'}) | contains(str, ["Paul", "Ann"]) | contains.(str, r"Paul\|Ann") | Result: 1 1 1<br>Julia uses regex
+| contains(str, 'jones', 'IgnoreCase', true) | contains(str, "jones", 'IgnoreCase', true) | contains.(str, r"jones"i) | Result: 1 0 0<br>Julia uses regex
+| count(str, 'n') | count(str, "n") | | Result: 3 1 1<br>Julia needs loop
+
+
+
+## String Indexing
+| Matlab (2020b) char array | Matlab (2020b) string | Julia (1.6) | Notes |
+| ------------------------- | --------------------- | ----------- | ----- |
+| s(1) | s{1}(1) | s[1] or s[begin] | returns : 'h'
+| s(5) | s{1}(5) | s[5] | returns : 'o'
+| s(end) | s{1}(end) | s[end] | returns : 'd'
+| s(4:9) | s{1}(4:9) | s[4:9] | returns : 'lo wor'
+| t = [0x2200, ' x ', 0x2203, ' y']; | t = char(0x2200) + " x " + char(0x2203) + " y"; | t = "\u2200 x \u2203 y"; | '∀ x ∃ y'
+| t(1:2) | t{1}(1:2) | t[1:4] | Result: '∀ '. Julia count unicode char depending on the char size in byte. In this example, t[1:2] will return ERROR: StringIndexError: invalid index [2], valid nearby indices [1]=>'∀', [4]=>' '<br>Stacktrace:<br>[...]
+| t(3) | t{1}(3) | t[collect(eachindex(t))[3]] | Result: 'x'. Julia first collect starting indices of unicode characters in the string, and then index it to the right location
+| t(3:5) | t{1}(3:5) | t[collect(eachindex(t))[3]:collect(eachindex(t))[5]] | Result: 'x ∃'. Julia first collect starting indices of unicode characters in the string, and then index it to the right locations
+| for c = t<br>disp(c);<br>end | for c = t{1}<br>disp(c);<br>end | for c in t<br>println(t)<br>end 
+
+## String Interpolation
+| Matlab (2020b) char array | Matlab (2020b) string | Julia (1.6) | Notes |
+| ------------------------- | --------------------- | ----------- | ----- |
+| sprintf('1 + 1 = %d', 1 + 1) | "1 + 1 is " + (1 + 1) | "1 + 1 is $(1 + 1)" | Result: "1 + 1 is 2"
+| sprintf('Price is $%d', 1 + 1) | "Price is $" + (1 + 1) | "Price is \$$(1 + 1)" | Result: "Price is $2"
+| compose('Price is $%d', [1; 2; 3])  | "Price is $" + [1; 2; 3] | "Price is \$" .* string.([1; 2; 3]) | Result:<br>"Price is $1"<br>"Price is $2"<br>"Price is \$3"<br>Julia needs to use element wise string conversion<br>Matlab char array returns 3x1 cell of chars
+| | | "Price is \$" .* string([1; 2; 3]) | Result:<br>"Price is $[1, 2, 3]"<br>Julia returns best representation of vector as string
+| sprintf('Price is $%d', [1; 2; 3]) | | join("Price is \$" .* string.([1; 2; 3])) | Result:<br>"Price is $1Price is $2Price is \$3"<br>Returns as 1 string
+
+## String Comparison
+| Matlab (2020b) char array | Matlab (2020b) string | Julia (1.6) | Notes |
+| ------------------------- | --------------------- | ----------- | ----- |
+| | "abracadabra" < "xylophone" | "abracadabra" < "xylophone" | Result: true
+| strcmp('abracadabra', 'xylophone') | "abracadabra" == "xylophone" | "abracadabra" == "xylophone" | Result: false
+| ~strcmp('Hello, world.', 'Goodbye, world.') | "Hello, world." ~= "Goodbye, world." | "Hello, world." != "Goodbye, world." | Result: true
+| strncmp('abracadabra', 'abracad', 3) | strncmp("abracadabra", "abracad", 3) | first("abracadabra", 3) == first("abracad", 3) | Result: true
+| strcmpi('abracadabra', 'ABracadabRA') | strcmpi("abracadabra", "ABracadabRA") | lowercase("abracadabra") == lowercase("ABracadabRA") | Result: true
+| strncmpi('abracadabra', 'ABracad', 3) | strncmpi("abracadabra", "ABracad", 3) | first(lowercase("abracadabra"), 3) == first(lowercase("ABracad"), 3) | Result: true
+| | matches(["Mercury","Venus","Earth","Mars"], "Earth") | ["Mercury","Venus","Earth","Mars"] .== "Earth" | Result: [false, false, true, false]<br>Note Julia uses element wise operator (.)
+| | matches(["Mercury","Venus","Earth","Mars"], "earth", "IgnoreCase", true) | lowercase.(["Mercury","Venus","Earth","Mars"]) .== lowercase("earth") | Result: [false, false, true, false]<br>Note Julia uses element wise operator (.)
+| | matches(["Mercury","Venus","Earth","Mars"], ["Earth", "Venus"]) | (["Mercury","Venus","Earth","Mars"] .== "Earth") .\| (["Mercury","Venus","Earth","Mars"] .== "Venus") | Result: [false, true, true, false]<br>Note Julia uses element wise operator (.)
+
 
 
 # Function
