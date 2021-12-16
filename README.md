@@ -1,26 +1,6 @@
-<!--<style
-  type="text/css">
-.matlab {
-  background-color: #DDCC77;
-  color: black;
-} 
-.matlab-other {
-  background-color: #B5A8F7;
-  color: black;
-} 
-.julia {
-  background-color: #7ECEC0;
-  color: black;
-} 
-</style>
--->
-
-<style
-  type="text/css">
-h1 {color:red;}
-
-p {color:blue;}
-</style>
+<div>
+  <img src="style.svg" width="1" height="1">
+</div>
 
 # JuliaForMatlabUsers
 Julia programming cheat sheet if you already know Matlab
