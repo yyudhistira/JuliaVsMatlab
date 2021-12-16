@@ -423,29 +423,52 @@ rstrip(" a ") * rstrip(" b ") # Same output as strcat(' a ', ' b ') on Matlab
 ```
 
 ### Join
+#### Result "applesbananaspineapples". Matlab default delimiter is " ". Julia default delimiter is ""
 ```matlab
 % Matlab with string
-join(["apples", "bananas", "pineapples"], "") % Result "applesbananaspineapples" Matlab default delimiter is " "
-
-join(["apples", "bananas", "pineapples"]) % Result "apples bananas pineapples"
-
-join(["apples", "bananas", "pineapples"], ", ") % Result: "apples, bananas, pineapples"
-
-join(["apples", "bananas", "pineapples"; "aa", "bb", "cc"], ", ") % Result: ["apples, bananas, pineapples"; "aa, bb, cc"]
-
-join(["Carlos","Sada"; "Ella","Olsen"; "Diana","Lee"], 1) % Result: "Carlos Ella Diana" "Sada Olsen Lee". Use loop in Julia
-
-join(["x","y","z"; "a","b","c"], [" + "," = "; " - "," = "]) % Result: "x + y = z" "a - b = c". Use loop in Julia
+join(["apples", "bananas", "pineapples"], "")
 ```
 ```julia
 # Julia
-join(["apples", "bananas", "pineapples"]) # Result "applesbananaspineapples" Julia default delimiter is ""
+join(["apples", "bananas", "pineapples"])
+```
 
-join(["apples", "bananas", "pineapples"], " ") # Result "apples bananas pineapples"
+#### Result "apples bananas pineapples". Matlab default delimiter is " ". Julia default delimiter is ""
+```matlab
+% Matlab with string
+join(["apples", "bananas", "pineapples"])
+```
+```julia
+# Julia
+join(["apples", "bananas", "pineapples"], " ")
+```
 
-join(["apples", "bananas", "pineapples"], ", ") # Result: "apples, bananas, pineapples"
+#### Result: "apples, bananas, pineapples"
+```matlab
+% Matlab with string
+join(["apples", "bananas", "pineapples"], ", ")
+```
+```julia
+# Julia
+join(["apples", "bananas", "pineapples"], ", ")
+```
 
-join.([["apples", "bananas", "pineapples"], ["aa", "bb", "cc"]], ", ")	# Result: ["apples, bananas, pineapples"; "aa, bb, cc"]
+#### Result: ["apples, bananas, pineapples"; "aa, bb, cc"]
+```matlab
+join(["apples", "bananas", "pineapples"; "aa", "bb", "cc"], ", ")
+```
+```julia
+# Julia
+join.([["apples", "bananas", "pineapples"], ["aa", "bb", "cc"]], ", ")
+```
+
+#### Not straight forward in Julia
+```matlab
+% Result: "Carlos Ella Diana" "Sada Olsen Lee"
+join(["Carlos","Sada"; "Ella","Olsen"; "Diana","Lee"], 1)
+
+% Result: "x + y = z" "a - b = c"
+join(["x","y","z"; "a","b","c"], [" + "," = "; " - "," = "])
 ```
 
 ## String Conversion
