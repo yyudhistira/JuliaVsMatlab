@@ -5,6 +5,9 @@ This work is licensed under Creative Commons CC-BY-4.0 (c) Yasri Yudhistira and 
 Please refer to the following for more information
 https://creativecommons.org/licenses/by/4.0/
 
+# Main Page
+[Back to main page](README.md)
+
 # Contents
 1. [Function Definition](##Function-definition)
 

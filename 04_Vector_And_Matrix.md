@@ -1,0 +1,178 @@
+# License
+
+This work is licensed under Creative Commons CC-BY-4.0 (c) Yasri Yudhistira and other contributors
+
+Please refer to the following for more information
+https://creativecommons.org/licenses/by/4.0/
+
+# Main Page
+[Back to main page](README.md)
+
+# Contents
+1. [Creation](##Creation)
+2. [Combination](##Combination)
+3. [Removal](##Removal)
+4. [Indexing](##Indexing)
+5. [Size and Shape](##Size-and-shape)
+6. [Resize and Reshape](##Resize-and-reshape)
+7. [Element Wise Operations](##Element-wise-operations)
+8. [Comprehension](##Comprehension)
+9. [Broadcasting](##Broadcasting)
+
+# Vector and Matrix
+
+## Creation
+| Matlab (2020b) | Julia (1.6) | Notes |
+| -------------- | ----------- | ----- |
+| []            | []          | Empty vector
+| [1 2 3] or [1, 2, 3] | [1 2 3]     | row vector. Julia treat this as Matrix with 1 row.
+| [1; 2; 3]            | [1; 2; 3] or [1, 2, 3]   | column vector. Julia treat comma (`,`) as "Vector" (matrix with 1 column)
+|                  | 1:3 | range of numbers between 1 to 3. Similar to [1; 2; 3] but conceptually different
+| (1:3)' | collect(1:3) | collect to convert range into column vector
+|        | j:k:n | range from j to k with step n
+| zeros(m)         | zeros(m, m)
+| zeros(m, n)      | zeros(m, n)
+| uint8(zeros(m))  | zeros(UInt8, m, m) | zero numbers with defined type, e.g. UInt8
+| uint8([0 0 0]])  | UInt8[0 0 0] | zero numbers with defined type, e.g. UInt8
+| ones(m)          | ones(m, m) | Types can also be specified, see zeros
+| ones(m, n)       | ones(m, n) | Types can also be specified, see zeros
+| a = eye(m)       | a = I | Identity matrix, needs `using LinearAlgebra` in Julia
+| diag(x)          | Diagonal(x) | create diagonal matrix
+| rand(m)          | rand(m, m) | Julia needs explicit dimension
+| rand(m, n)       | rand(m, n)
+| randn(m)         | randn(m, m) | Julia needs explicit dimension
+| randn(m, n)      | randn(m, n)
+| true(m)          | trues(m, m) | Julia needs explicit dimension
+| true(m, n)       | trues(m, n)
+| false(m)         | falses(m, m) | Julia needs explicit dimension
+| false(m, n)      | falses(m, n)
+| nan(m) or NaN(m) | repeat([NaN], m, m) | Julia needs explicit dimension
+| nan(m, n) or NaN(m, n) | repeat([NaN], m, n)
+| inf(m) or Inf(m) | repeat([Inf], m, m) | Julia needs explicit dimension
+| inf(m, n) or Inf(m, n) | repeat([Inf], m, n)
+| a = b            | a = copy(b) | copy values. In matlab copy by value is the only assignment possible, although it is technically assigned by reference until change on `b` is requested.
+|                  | a = b | assign by reference
+
+## Combination
+| Matlab (2020b) | Julia (1.6) | Notes |
+| -------------- | ----------- | ----- |
+| [[1 2] [3 4]]    | [1 2 3 4]
+| [[1, 2], [3, 4]] | [1 2 3 4]
+| [[1; 2], [3; 4]] | [[1, 2] [3, 4]] | Julia uses space to concat horizontally
+| [[1; 2], [3; 4]] | hcat([1, 2], [3, 4]) | Or use hcat to get the same result
+| [[1; 2]; [3; 4]] | [[1, 2]; [3, 4]] | Julia use `;` to concat vertically
+| [[1; 2]; [3; 4]] | vcat([1, 2], [3, 4]) | Or use vcat to get the same result
+|                  | [[1, 2], [3, 4]] | Combination with `','` gives unexpected result from matlab point of view, resulting in arrays of two vectors, namely [1, 2] and [3, 4]
+| [[1; 2; 3] [4; 5; 6]] | [1:3 4:6]
+| A = [10  20  30; 60  70  80];<br>A(3, 4) = 1; | B = zeros(eltype(A), 3, 4);<br>B[1:2, 1:3] = A;<br>A = B;<br>A[3,4] = 1; | expanding matrix in Julia is done by initializing matrix with larger size, and copy the first few elements into it
+
+## Removal
+| Matlab (2020b) | Julia (1.6) | Notes |
+| -------------- | ----------- | ----- |
+| A(2, :) = [] | A = A[1:end .!= 2, :] | remove row 2
+| A(:, 2) = [] | A = A[:, 1:end .!= 2] | remove column 2
+| A([2, 3], :) = [] | A = A[setdiff(1:end, [2, 3]), :] | remove row 2 and 3
+| A([2, 3], :) = []; <br>A(:, 1) = []; | A = A[setdiff(1:end, [2, 3]), 1:end .!= 1] | remove row 2 and 3 and column 1. Julia can do rows and columns removal simulataneously
+| squeeze(A) | dropdims(A, dims=tuple(findall(size(A) .== 1)...)) | Remove all dimensions of length 1
+|  | dropdims(A, dims=2) | Remove 2nd dimension of A if 2nd dimension has length of 1. If length is not 1, error is thrown
+
+## Indexing
+| Matlab (2020b) | Julia (1.6) | Notes |
+| -------------- | ----------- | ----- |
+| X = A(I_1, I_2, ..., I_n) | X = A[I_1, I_2, ..., I_n] | A is n-dimensional array. Note Julia uses [] and Matlab ()
+| X = A(1:2:10, 2:2:10) | X = A[1:2:10, 2:2:10] | Multi dimensional indexing using range
+| A([1, 3], [4, 5]) | A[[1, 3], [4, 5]] | Select a few rows (1 & 3) and columns (4 & 5). Note difference in bracket between Julia [] and Matlab ()
+| A(2:3, 2:end-1) | A[2:3, 2:end-1] | use special keyword `end` to refer to last index
+| A([]) | A[[]] | Select no element from A
+| A(2, :) | transpose(A[2, :]) | Select 2nd row of the 2D matrix. In Julia it will be gathered as Vector (column matrix). To have the same dimension, transpose is needed.
+| A(:, 2) | A[:, 2] | Select 2nd column of the 2D matrix.
+| A(:) | A[:] | vectorizing matrix
+| A([true; true; false; false]) | A[[true, true, false, false]] | select by boolean. Note that Julia will produce column vector. In Matlab use semicolon (;)
+| A([true, true, false, false]) | transpose(A[[true, true, false, false]]) | select by boolean. Note that Julia will produce column vector, hence transpose is needed if Matlab uses comma (,) in boolean list
+| A(I_1, I_2, ..., I_n) = X | A[I_1, I_2, ..., I_n] = X<br>A[I_1, I_2, ..., I_n] .= X | Number of element in X must be the same as the place in A to fill in. Note sign difference in Julia [] and Matlab ()
+
+## Size and Shape
+| Matlab (2020b) | Julia (1.6) | Notes |
+| -------------- | ----------- | ----- |
+| class(A) | eltype(A) | the type of the elements contained in AXa
+| numel(A) | length(A) | the number of elements in A
+| length(A) | max(size(A)) | length or largest dimension
+| ndims(A) | ndims(A) | the number of dimensions of A
+| size(A) | size(A) | a tuple containing the dimensions of A
+| size(A, n) | size(A, n) | the size of A along dimension n
+| | axes(A) | a tuple containing the valid indices of A
+| | axes(A,n) | a range expressing the valid indices along dimension n
+| | eachindex(A) | an efficient iterator for visiting each position in A
+| | stride(A,k) | the stride (linear index distance between adjacent elements) along dimension k
+| | strides(A) | a tuple of the strides in each dimension
+| isscalar(A) | isa(x, Union{Number,AbstractString,Char,Bool}) | Determine whether A is scalar
+| issorted(A) | issorted(A) | Determine if array is sorted
+| issortedrows(A) | | Determine if matrix or table rows are sorted
+| isvector(A) | isa(A, Array) && (sum(size(A) .!= 1) <= 1) | Determine whether array is vector
+| ismatrix(A) | isa(A, Union{Array, Matrix}) && (sum(size(A) .!= 1) > 1) | Determine whether array is matrix
+| isrow(A) | isa(A, Union{Array, Matrix}) && (sum((size(A) .!= 1)[setdiff(1:ndims(A), 2)]) == 0) | Determine whether array is row vector
+| iscolumn(A) | isa(A, Union{Array, Matrix}) && (ndims(A) == 1 \|\| sum(size(A)[2:end] .!= 1) == 0) | Determine whether array is column vector
+| isempty(A) | isempty(A) | Determine whether array is empty
+
+## Resize and Reshape
+| Matlab (2020b) | Julia (1.6) | Notes |
+| -------------- | ----------- | ----- |
+| reshape(A, 3, 2) | reshape(A, 3, 2) | an array containing the same data as A, but with different dimensions
+| reshape(A, [], 1) | reshape(A, :, 1) | reshape into column vector
+| reshape(A, 1, []) | reshape(A, 1, :) | reshape into row vector
+| sort(A) | sort(A) | Sort vector A
+| sort(A) | sort(A, dims=1) | Sort matrix by first dimension. Note in Julia dimension explicit defition is required
+| sort(A, 2) | sort(A, dims=2) | Sort matrix by 2nd dimension
+| sort(A) | sort(A, rev=true) | Sort vector A
+| sort(A, 'descend') | sort(A, dims=1, rev=true) | Sort matrix by first dimension from high to low. For matrix, dimension is required
+| [B, idx] = sort(A) | idx = sortperm(A); B = A(idx) | sort vector A and return it's index. Note that in Julia it only works for vector, not matrix
+| [B, idx] = sort(A) |  | no equivalent function in Julia when A is matrix
+| sortrows(A, 1) | sortslices(A, dims=1, lt=(x, y)->isless(x[1], y[1])) | Sort rows of matrix based on column 1
+| sortrows(A, 2) | sortslices(A, dims=1, lt=(x, y)->isless(x[2], y[2])) | Sort rows of matrix based on column 1
+| sortrows(A, [1, 7]) | sortslices(A, dims=1, lt=(x, y)->(isless(x[1], y[1]) \|\| (isequal(x[1], y[1]) && isless(x[7], y[7])))) | Sort rows of matrix based on column 1 then column 7
+| transpose(A) | transpose(A) | Transpose vector or matrix
+| A' or ctranspose(A) | A' or adjoint(A) | Complex conjugate transpose
+| flip(A) | reverse(A, dims=1) | Flip order of elements
+| flip(A, 2) | reverse(A, dims=2) | Flip order of elements in 2nd dimension
+| rot90(A) | rotl90(A) | Rotate array 90 degrees counterclockwise (left)
+| rot90(A, 3) | rotl90(A, 3) or rotr90(A) | Rotate array 270 degrees counterclockwise (left) or 90 degree clockwise (right)
+| rot90(A, 2) | rotl90(A, 2) or rotr90(A, 2) or rot180(A) | Rotate array 180 degrees
+| permute(A, [m, n, p]) | permutedims(A, (m, n, p)) | Permute array dimensions
+| circshift(A, n) | circshift(A, n) | Shift array circularly
+| circshift(A, n, m) | circshift(A, (n, m)) | Shift matrix circularly. Julia uses tuple
+| shiftdim(A) | | Shift array dimensions
+
+## Element Wise Operations
+| Matlab (2020b) | Julia (1.6) | Notes |
+| -------------- | ----------- | ----- |
+| +x | +x | unary plus
+| -x | -x | element wise negation
+| x + y | x + y or x .+ y | element wise addition. If x and y has the same number of element but different dimension, for example x is row vector and y is column vector, then x + y in Julia gives the same answer in Matlab. Otherwise x + y in Julia throws error and Matlab do auto expansion.
+| x - y | x - y or x .- y | element wise subtraction. Same rule as .+ see above
+| x .* y | x .* y | element wise multiplication
+| x ./ y | x ./ y | element wise division
+| floor(x ./ y) | x .÷ y | element wise integer divide truncated to an integer
+| x .\ y | x .\ y | element wise inverse divide equivalent to y / x
+| x .^ y | x .^ y | element wise raises x to the yth power
+| arrayfun(f, x) | f.(x) | element wise f. Sometimes f(x) in matlab gives the same result when x is array
+| sin(x) or arrayfun(sin, x)| sin.(x) | element wise sin, return same dimension as x. Julia will throw error on sin(x) when x is array
+| max(a, b) or arrayfun(@(x, y) max(x,y), a, b) | max.(a,b) | element wise max, return same dimension as a and b. Julia max(a, b) will throw error when a and b are arrays
+| a == b or arrayfun(@(x, y) x == y, a, b)| a .== b | element wise equality comparison, return same dimension as a and b. Julia a == b will do all(a .== b) when a and b are arrays
+| a > b or arrayfun(@(x, y) x > y, a, b)| a .> b | element wise greater than comparison. Same rule as above. Same as other operators as .< .!= .≈ (isapprox), .≉
+
+## Comprehension
+| Matlab (2020b) | Julia (1.6) | Notes |
+| -------------- | ----------- | ----- |
+| sum(1 ./ ((1:1000) .^ 2)) | sum(1/n^2 for n=1:1000) | sums a series
+| arrayfun(@(x, y, z) 0.25\*x + 0.5\*y + 0.25\*z, x(1:end-2), x(2:end-1), x(3:end)) | [ 0.25\*x[i-1] + 0.5\*x[i] + 0.25\*x[i+1] for i=2:length(x)-1 ] | weighted average of the current element and its left and right neighbor along a 1-d grid
+| | [(i,j) for i=1:3 for j=1:i if i+j == 4] | result:<br>2-element Vector{Tuple{Int64, Int64}}:<br>(2, 2)<br>(3, 1)
+| | map(tuple, (1/(i+j) for i=1:2, j=1:2), [1 3; 2 4]) | result: <br>2×2 Matrix{Tuple{Float64, Int64}}:<br>(0.5, 1)       (0.333333, 3)<br>(0.333333, 2)  (0.25, 4)
+
+## Broadcasting
+| Matlab (2020b) | Julia (1.6) | Notes |
+| -------------- | ----------- | ----- |
+| a = rand(2,1); A = rand(2,3);<br>a + A | a = rand(2,1); A = rand(2,3);<br>broadcast(+, a, A) | Result 2x3 matrix. Matlab will perform auto expansion, Julia needs explicit broadcast
+| a = rand(2,1); b = rand(1,2);<br>a + b | a = rand(2,1); b = rand(1,2);<br>broadcast(+, a, b) | Result: 2x2 matrix. Matlab will perform auto expansion, Julia needs explicit broadcast
+
+
+

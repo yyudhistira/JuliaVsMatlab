@@ -5,16 +5,19 @@ This work is licensed under Creative Commons CC-BY-4.0 (c) Yasri Yudhistira and 
 Please refer to the following for more information
 https://creativecommons.org/licenses/by/4.0/
 
+# Main Page
+[Back to main page](README.md)
+
 # Contents
-    1. [Types](##Types)
-    2. [Literals](##Literals)
-    3. [Type Conversion and Checking](##Type-conversion-and-checking)
-    4. [Numerical operations](##Numerical-operations)
-    5. [Comparison](##Comparison)
-    6. [Logical Operations](##Logical-operations)
-    7. [Complex Number Operations](##Complex-number-operations)
-    8. [Bitwise Operations](##Bitwise-operations)
-    9. [Updating Operations (only available in Julia)](##Updating-operations-only-available-in-Julia)
+1. [Types](##Types)
+2. [Literals](##Literals)
+3. [Type Conversion and Checking](##Type-conversion-and-checking)
+4. [Numerical operations](##Numerical-operations)
+5. [Comparison](##Comparison)
+6. [Logical Operations](##Logical-operations)
+7. [Complex Number Operations](##Complex-number-operations)
+8. [Bitwise Operations](##Bitwise-operations)
+9. [Updating Operations (only available in Julia)](##Updating-operations-only-available-in-Julia)
 
 # Number Types
 
