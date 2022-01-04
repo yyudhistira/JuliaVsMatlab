@@ -5,6 +5,16 @@ This work is licensed under Creative Commons CC-BY-4.0 (c) Yasri Yudhistira and 
 Please refer to the following for more information
 https://creativecommons.org/licenses/by/4.0/
 
+# Contents
+1. [String Types](##String-types)
+2. [Char Operations](##Char-operations)
+3. [String Creation and Concatenation](##String-creation-and-concatenation)
+4. [String Conversion](##String-conversion)
+5. [String Testing](##String-testing)
+6. [String Indexing](##String-indexing)
+7. [String Interpolation](##String-interpolation)
+8. [String Comparison](##String-comparison)
+
 # String
 
 ## String Types

@@ -1,5 +1,5 @@
 module JuliaForMatlabUsers
 
-greet() = print("Hello World!")
+greet() = print("Julia for Matlab Users")
 
 end # module
