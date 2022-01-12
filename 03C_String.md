@@ -30,7 +30,7 @@ https://creativecommons.org/licenses/by/4.0/
 | Matlab (2020b) | Julia (1.6) | Notes |
 | -------------- | ----------- | ----- |
 | c = 'hello'    | c = ['h', 'e', 'l', 'l', 'o']
-| d = double(c)  | d = Float32.(c)
+| d = double(c)  | d = Float64.(c)
 | a = char(d)    | a = Char.(d)
 | 'x' - 'a'      | 'x' - 'a'   | Result: 23
 | 'A' + 1        | Int('A' + 1) | Result: 66
@@ -191,7 +191,7 @@ double("123")
 ```
 ```julia
 # Julia
-parse(Float32, "123")
+parse(Float64, "123")
 ```
 
 ### Number to string
