@@ -3,49 +3,87 @@
 
 # Basic Programming
 
-## Comments
+## Comment
+<table>
+<tr><th>Matlab (2020b)</th><th>Julia (1.6)</th></tr>
+<tr style="vertical-align:top">
+<td>
+
 ```matlab
-% Matlab (2020b)
 % Comment
 %{
     Comment line1
     Comment line2
 %}
 ```
+</td>
+<td>
+
 ```julia
-# Julia (1.6)
 # Comment
 #=
 Comment line1
 Comment line2
 =#
 ```
+</td>
+</tr>
+</table>
 
 ## Expression
+
+<table>
+<tr><th>Matlab (2020b)</th><th>Julia (1.6)</th></tr>
+<tr style="vertical-align:top">
+<td>
+
 ```matlab
-% Matlab (2020b)
-a = b + 20 % show calculation result on screen
-a = b + 20; % hide calculation result on screen
-1 + 3; 6 + 10; % multiple operations in 1 line
+% show calculation result on screen
+a = b + 20
+
+% hide calculation result on screen
+a = b + 20;
+
+% multiple operations in 1 line
+1 + 3; 6 + 10;
 ```
+</td>
+<td>
+
 ```julia
-# Julia (1.6)
-a = b + 20 # show calculation result on screen
-a = b + 20; # hide calculation result on screen
-1 + 3; 6 + 10; % multiple operations in 1 line
+# show calculation result on screen
+a = b + 20
+
+# hide calculation result on screen
+a = b + 20;
+
+# multiple operations in 1 line
+1 + 3; 6 + 10;
 ```
+</td>
+</tr>
+</table>
 
 ## Multi line expression
+
+<table>
+<tr><th>Matlab (2020b)</th><th>Julia (1.6)</th></tr>
+<tr style="vertical-align:top">
+<td>
+
 ```matlab
-% Matlab (2020b)
 a = b + ...
 20
 
+% string 'hello world' expressed in two lines
 x = ['hello ' ... 
-'world']; % string 'hello world' expressed in two lines
+'world'];
 ```
+
+</td>
+<td>
+
 ```julia
-# Julia (1.6)
 a = b +
 20
 # No `...` is needed. If statement is incomplete it knows that it will continue in the next line.
@@ -55,21 +93,38 @@ a = b +
 #   + 20
 # Instead it will do two operations, first assigning `a = b` then showing 20.
 
+# string "hello world" expressed in two lines
 x = "hello " * 
-"world"; # string "hello world" expressed in two lines
+"world";
 ```
+</td>
+</tr>
+</table>
 
 ## Multi line string
+
+<table>
+<tr><th>Matlab (2020b)</th><th>Julia (1.6) </th></tr>
+<tr style="vertical-align:top">
+<td>
+
 ```matlab
-% Matlab (2020b)
 multiline = sprintf([ ... 
 'Line 1\n'... 
 'Line 2\n'... 
 ]);
 ```
+</td>
+<td>
+
 ```julia
-# Julia (1.6)
 multiline = """Line1
 Line2
 """
 ```
+</td>
+</tr>
+</table>
+
+
+
