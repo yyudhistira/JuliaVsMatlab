@@ -6,8 +6,8 @@
 ## Comment
 <table>
 <tr><th>Matlab (2020b)</th><th>Julia (1.6)</th></tr>
-<tr style="vertical-align:top">
-<td>
+<tr>
+<td valign="top">
 
 ```matlab
 % Comment
@@ -17,7 +17,7 @@
 %}
 ```
 </td>
-<td>
+<td valign="top">
 
 ```julia
 # Comment
@@ -34,8 +34,8 @@ Comment line2
 
 <table>
 <tr><th>Matlab (2020b)</th><th>Julia (1.6)</th></tr>
-<tr style="vertical-align:top">
-<td>
+<tr>
+<td valign="top">
 
 ```matlab
 % show calculation result on screen
@@ -48,7 +48,7 @@ a = b + 20;
 1 + 3; 6 + 10;
 ```
 </td>
-<td>
+<td valign="top">
 
 ```julia
 # show calculation result on screen
@@ -68,8 +68,8 @@ a = b + 20;
 
 <table>
 <tr><th>Matlab (2020b)</th><th>Julia (1.6)</th></tr>
-<tr style="vertical-align:top">
-<td>
+<tr>
+<td valign="top">
 
 ```matlab
 a = b + ...
@@ -81,7 +81,7 @@ x = ['hello ' ...
 ```
 
 </td>
-<td>
+<td valign="top">
 
 ```julia
 a = b +
@@ -105,8 +105,8 @@ x = "hello " *
 
 <table>
 <tr><th>Matlab (2020b)</th><th>Julia (1.6) </th></tr>
-<tr style="vertical-align:top">
-<td>
+<tr>
+<td valign="top">
 
 ```matlab
 multiline = sprintf([ ... 
@@ -115,7 +115,7 @@ multiline = sprintf([ ...
 ]);
 ```
 </td>
-<td>
+<td valign="top">
 
 ```julia
 multiline = """Line1
