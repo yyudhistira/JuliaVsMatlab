@@ -4,28 +4,55 @@
 # Variables
 
 ## Variable names
+<table>
+<tr><th>Matlab (2020b)</th><th>Julia (1.6) </th></tr>
+<tr>
+<td valign="top">
+
 ```matlab
-% Matlab (2020b)
 x = 1.0
 Z = "My string"
 ```
+</td>
+<td valign="top">
+
 ```julia
-# Julia (1.6)
 x = 1.0
 Z = "My string"
-안녕하세요 = "Hello" # unicode variable name is allowed in Julia. Not in matlab
+
+# unicode variable name is allowed in Julia. Not in matlab
+안녕하세요 = "Hello"
 ```
+</td>
+</tr>
+</table>
+
 
 ## Variable redefinition / shadowing
+<table>
+<tr><th>Matlab (2020b)</th><th>Julia (1.6) </th></tr>
+<tr>
+<td valign="top">
+
 ```matlab
-% Matlab (2020b)
-pi = 3 % shadowing known constant
+% shadowing known constant
+pi = 3
 
-clear pi % return back to original definition
+% return back to original definition
+clear pi
 ```
+</td>
+<td valign="top">
+
 ```julia
-# Julia (1.6)
-pi = 3 # shadowing known constant, ONLY possible if it is not used yet
+# shadowing known constant
+# ONLY possible if it is not used yet
+pi = 3
 
-# Not possible to change the definition back original once it is redefined
+# Not possible to return back to original definition
+# once it is redefined
 ```
+</td>
+</tr>
+</table>
+

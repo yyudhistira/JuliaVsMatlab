@@ -86,16 +86,21 @@ x = ['hello ' ...
 ```julia
 a = b +
 20
-# No `...` is needed. If statement is incomplete it knows that it will continue in the next line.
-
-# Be careful with
-#   a = b
-#   + 20
-# Instead it will do two operations, first assigning `a = b` then showing 20.
 
 # string "hello world" expressed in two lines
 x = "hello " * 
 "world";
+
+# No `...` is needed. 
+# If statement is incomplete it knows that it will 
+# continue in the next line.
+
+# Be careful with
+#   a = b
+#   + 20
+# Instead it will do two operations:
+# first assigning `a = b` then showing 20.
+
 ```
 </td>
 </tr>
