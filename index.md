@@ -1,8 +1,6 @@
 # Julia For Matlab Users
 Julia programming cheat sheet if you already know Matlab.
 
-Refer to [github pages](https://yyudhistira.github.io/JuliaVsMatlab/)
-
 Work is still in progress.
 
 You are welcome to contribute. Please refer to [CONTRIBUTING](CONTRIBUTING.md) file for more details.
