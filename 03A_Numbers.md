@@ -1,5 +1,5 @@
 # Main Page
-[Back to main page](README.md)
+[Back to main page](index.md)
 
 # Contents
 1. [Types](##Types)
