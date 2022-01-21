@@ -5,7 +5,7 @@ Work is still in progress.
 
 You are welcome to contribute. Please refer to [CONTRIBUTING](CONTRIBUTING.md) file for more details.
 
-See [LICENSE](LICENSE.md)
+See [LICENSE](LICENSE)
 
 # Contents
 1. [Basic Programming](01_Basic_Programming.md)
