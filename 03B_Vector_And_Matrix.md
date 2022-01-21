@@ -193,26 +193,26 @@ repeat([Inf], a, b)
 </table>
 
 ### Built in functions
-| Matlab (2020b)   | Julia (1.6)        | Notes |
-| ---------------- | ------------------ | ----- |
-| zeros(m)         | zeros(m, m)
-| zeros(m, n)      | zeros(m, n)
-| uint8(zeros(m))  | zeros(UInt8, m, m) | zero numbers with defined type, e.g. UInt8
-| uint8([0 0 0]])  | UInt8[0 0 0]       | zero numbers with defined type, e.g. UInt8
-| ones(m)          | ones(m, m)         | Types can also be specified, see zeros
-| ones(m, n)       | ones(m, n)         | Types can also be specified, see zeros
-| a = eye(m)       | a = I(m)           | Identity matrix, needs `using LinearAlgebra` in Julia
-| diag(x)          | Diagonal(x)        | create diagonal matrix
-| rand(m)          | rand(m, m)         | Julia needs explicit dimension
-| rand(m, 1)       | rand(m)            | Julia returns column vector
-| rand(m, 1)       | rand(m, 1)         | Julia returns matrix size (m, 1)
-| rand(m, n)       | rand(m, n)
-| randn(m)         | randn(m, m)        | Julia needs explicit dimension
-| randn(m, n)      | randn(m, n)
-| true(m)          | trues(m, m)        | Julia needs explicit dimension
-| true(m, n)       | trues(m, n)
-| false(m)         | falses(m, m)       | Julia needs explicit dimension
-| false(m, n)      | falses(m, n)
+| Matlab (2020b)     | Julia (1.6)          | Notes |
+| ------------------ | -------------------- | ----- |
+| `zeros(m)`         | `zeros(m, m)`
+| `zeros(m, n)`      | `zeros(m, n)`
+| `uint8(zeros(m))`  | `zeros(UInt8, m, m)` | zero numbers with defined type, e.g. UInt8
+| `uint8([0 0 0]])`  | `UInt8[0 0 0]`       | zero numbers with defined type, e.g. UInt8
+| `ones(m)`          | `ones(m, m)`         | Types can also be specified, see zeros
+| `ones(m, n)`       | `ones(m, n)`         | Types can also be specified, see zeros
+| `a = eye(m)`       | `a = I(m)`           | Identity matrix, needs `using LinearAlgebra` in Julia
+| `diag(x)`          | `Diagonal(x)`        | create diagonal matrix
+| `rand(m)`          | `rand(m, m)`         | Julia needs explicit dimension
+| `rand(m, 1)`       | `rand(m)`            | Julia returns column vector
+| `rand(m, 1)`       | `rand(m, 1)`         | Julia returns matrix size (m, 1)
+| `rand(m, n)`       | `rand(m, n)`
+| `randn(m)`         | `randn(m, m)`        | Julia needs explicit dimension
+| `randn(m, n)`      | `randn(m, n)`
+| `true(m)`          | `trues(m, m)`        | Julia needs explicit dimension
+| `true(m, n)`       | `trues(m, n)`
+| `false(m)`         | `falses(m, m)`       | Julia needs explicit dimension
+| `false(m, n)`      | `falses(m, n)`
 
 ## Combination
 
@@ -909,29 +909,29 @@ isa(A, Union{Array, Matrix}) && (ndims(A) == 1 || sum(size(A)[2:end] .!= 1) == 0
 ### Functions not available in Matlab
 | Julia (1.6)  | Notes |
 | ------------ | ----- |
-| axes(A)      | a tuple containing the valid indices of A
-| axes(A, n)   | a range expressing the valid indices along dimension n
-| eachindex(A) | an efficient iterator for visiting each position in A
-| stride(A, k) | the stride (linear index distance between adjacent elements) along dimension k
-| strides(A)   | a tuple of the strides in each dimension
+| `axes(A)`      | a tuple containing the valid indices of A
+| `axes(A, n)`   | a range expressing the valid indices along dimension n
+| `eachindex(A)` | an efficient iterator for visiting each position in A
+| `stride(A, k)` | the stride (linear index distance between adjacent elements) along dimension k
+| `strides(A)`   | a tuple of the strides in each dimension
 
 ## Resize and Reshape
 | Matlab (2020b)        | Julia (1.6)                               | Notes |
 | --------------------- | ----------------------------------------- | ----- |
-| reshape(A, 3, 2)      | reshape(A, 3, 2)                          | Reshape into different dimension
-| reshape(A, [], 1)     | reshape(A, :, 1)                          | reshape into column vector
-| reshape(A, 1, [])     | reshape(A, 1, :)                          | reshape into row vector
-| transpose(A)          | transpose(A)                              | Transpose vector or matrix
-| A'<br>ctranspose(A)   | A'<br>adjoint(A)                          | Complex conjugate transpose
-| flip(A)               | reverse(A, dims=1)                        | Flip order of elements
-| flip(A, 2)            | reverse(A, dims=2)                        | Flip order of elements in 2nd dimension
-| rot90(A)              | rotl90(A)                                 | Rotate array 90 degrees counterclockwise (left)
-| rot90(A, 3)           | rotl90(A, 3)<br>rotr90(A)                 | Rotate array 270 degrees counterclockwise (left) or 90 degree clockwise (right)
-| rot90(A, 2)           | rotl90(A, 2)<br>rotr90(A, 2)<br>rot180(A) | Rotate array 180 degrees
-| permute(A, [m, n, p]) | permutedims(A, (m, n, p))                 | Permute array dimensions
-| circshift(A, n)       | circshift(A, n)                           | Shift array circularly
-| circshift(A, n, m)    | circshift(A, (n, m))                      | Shift matrix circularly. Julia uses tuple
-| shiftdim(A)           |                                           | Shift array dimensions
+| `reshape(A, 3, 2)`      | `reshape(A, 3, 2)`                          | Reshape into different dimension
+| `reshape(A, [], 1)`     | `reshape(A, :, 1)`                          | reshape into column vector
+| `reshape(A, 1, [])`     | `reshape(A, 1, :)`                          | reshape into row vector
+| `transpose(A)`          | `transpose(A)`                              | Transpose vector or matrix
+| `A'`<br>`ctranspose(A)`   | `A'`<br>`adjoint(A)`                          | Complex conjugate transpose
+| `flip(A)`               | `reverse(A, dims=1)`                        | Flip order of elements
+| `flip(A, 2)`            | `reverse(A, dims=2)`                        | Flip order of elements in 2nd dimension
+| `rot90(A)`              | `rotl90(A)`                                 | Rotate array 90 degrees counterclockwise (left)
+| `rot90(A, 3)`           | `rotl90(A, 3)`<br>`rotr90(A)`                 | Rotate array 270 degrees counterclockwise (left) or 90 degree clockwise (right)
+| `rot90(A, 2)`           | `rotl90(A, 2)`<br>`rotr90(A, 2)`<br>`rot180(A)` | Rotate array 180 degrees
+| `permute(A, [m, n, p])` | `permutedims(A, (m, n, p))`                 | Permute array dimensions
+| `circshift(A, n)`       | `circshift(A, n)`                           | Shift array circularly
+| `circshift(A, n, m)`    | `circshift(A, (n, m)`)                      | Shift matrix circularly. Julia uses tuple
+| `shiftdim(A)`           |                                           | Shift array dimensions
 
 ## Sort
 
@@ -1040,18 +1040,18 @@ sortslices(A, dims=1, lt=(x, y)->(isless(x[1], y[1]) || (isequal(x[1], y[1]) && 
 </table>
 
 ## Element Wise Operations
-| Matlab (2020b) | Julia (1.6)     | Notes |
-| -------------- | --------------- | ----- |
-| +x             | +x              | unary plus
-| -x             | -x              | element wise negation
-| x + y          | x + y<br>x .+ y | element wise addition. If x and y has the same number of element but different dimension, for example x is row vector and y is column vector, then x + y in Julia gives the same answer in Matlab. Otherwise x + y in Julia throws error and Matlab do auto expansion.
-| x - y          | x - y<br>x .- y | element wise subtraction. Same rule as .+ see above
-| x .* y         | x .* y          | element wise multiplication
-| x ./ y         | x ./ y          | element wise division
-| floor(x ./ y)  | x .÷ y          | element wise integer divide truncated to an integer
-| x .\ y         | x .\ y          | element wise inverse divide equivalent to y / x
-| x .^ y         | x .^ y          | element wise raises x to the yth power
-| arrayfun(f, x) | f.(x)           | element wise f. Sometimes f(x) in matlab gives the same result when x is array
+| Matlab (2020b)   | Julia (1.6)         | Notes |
+| ---------------- | ------------------- | ----- |
+| `+x`             | `+x`                | unary plus
+| `-x`             | `-x`                | element wise negation
+| `x + y`          | `x + y`<br>`x .+ y` | element wise addition. If x and y has the same number of element but different dimension, for example x is row vector and y is column vector, then x + y in Julia gives the same answer in Matlab. Otherwise x + y in Julia throws error and Matlab do auto expansion.
+| `x - y`          | `x - y`<br>`x .- y` | element wise subtraction. Same rule as .+ see above
+| `x .* y`         | `x .* y`            | element wise multiplication
+| `x ./ y`         | `x ./ y`            | element wise division
+| `floor(x ./ y)`  | `x .÷ y`            | element wise integer divide truncated to an integer
+| `x .\ y`         | `x .\ y`            | element wise inverse divide equivalent to y / x
+| `x .^ y`         | `x .^ y`            | element wise raises x to the yth power
+| `arrayfun(f, x)` | `f.(x)`             | element wise f. Sometimes f(x) in matlab gives the same result when x is array
 
 ### Element wise operation on function (example)
 <table>
